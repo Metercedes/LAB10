@@ -10,7 +10,7 @@ This project is a Spring Boot application implementing basic HTTP concepts using
 ## Setup
 
 1. Clone the repository
-2. Create a `.env` file in the root directory:
+1. Create a `.env` file in the root directory:
 
 ```properties
 DB_URL=jdbc:sqlite:database.db
@@ -18,13 +18,13 @@ DB_USERNAME=sa
 DB_PASSWORD=password
 ```
 
-3. Build the project:
+1. Build the project:
 
 ```bash
 ./mvnw clean compile
 ```
 
-4. Run the application:
+1. Run the application:
 
 ```bash
 ./mvnw spring-boot:run -Dspring.devtools.restart.enabled=false
