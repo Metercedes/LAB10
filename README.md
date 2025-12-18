@@ -11,30 +11,37 @@ This project is a Spring Boot application implementing basic HTTP concepts using
 
 1. Clone the repository
 2. Create a `.env` file in the root directory:
-   ```properties
-   DB_URL=jdbc:sqlite:database.db
-   DB_USERNAME=sa
-   DB_PASSWORD=password
-   ```
+
+```properties
+DB_URL=jdbc:sqlite:database.db
+DB_USERNAME=sa
+DB_PASSWORD=password
+```
+
 3. Build the project:
-   ```bash
-   ./mvnw clean compile
-   ```
+
+```bash
+./mvnw clean compile
+```
+
 4. Run the application:
-   ```bash
-   ./mvnw spring-boot:run -Dspring.devtools.restart.enabled=false
-   ```
+
+```bash
+./mvnw spring-boot:run -Dspring.devtools.restart.enabled=false
+```
 
 The application will start on `http://localhost:8080`
 
 ## Running the Server
 
 **Start the server:**
+
 ```bash
 ./mvnw spring-boot:run -Dspring.devtools.restart.enabled=false
 ```
 
 **Stop the server:**
+
 ```bash
 lsof -ti:8080 | xargs kill -9
 ```
@@ -53,67 +60,80 @@ The project follows a layered architecture:
 ## Endpoints
 
 ### Home
+
 - **URL**: `/`
 - **Method**: `GET`
 - **Response**: Welcome HTML page
 
 ### Hello
+
 - **URL**: `/hello`
 - **Method**: `GET`
 - **Response**: `Hello, user!`
 
 ### User Registration
+
 - **URL**: `/api/users/register`
 - **Method**: `POST`
 - **Request Body**:
-  ```json
-  {
-    "username": "johndoe",
-    "email": "john@example.com",
-    "password": "securepassword"
-  }
-  ```
+
+```json
+{
+  "username": "johndoe",
+  "email": "john@example.com",
+  "password": "securepassword"
+}
+```
+
 - **Response** (201 Created):
-  ```json
-  {
-    "id": 1,
-    "username": "johndoe",
-    "email": "john@example.com",
-    "password": "$2a$10$..."
-  }
-  ```
+
+```json
+{
+  "id": 1,
+  "username": "johndoe",
+  "email": "john@example.com",
+  "password": "$2a$10$..."
+}
+```
 
 ### User Login
+
 - **URL**: `/api/users/login`
 - **Method**: `POST`
 - **Request Body**:
-  ```json
-  {
-    "email": "john@example.com",
-    "password": "securepassword"
-  }
-  ```
+
+```json
+{
+  "email": "john@example.com",
+  "password": "securepassword"
+}
+```
+
 - **Response** (200 OK):
-  ```json
-  {
-    "message": "Login successful"
-  }
-  ```
+
+```json
+{
+  "message": "Login successful"
+}
+```
 
 ### Get All Users
+
 - **URL**: `/api/users/info`
 - **Method**: `GET`
 - **Response** (200 OK):
-  ```json
-  [
-    {
-      "id": 1,
-      "username": "johndoe",
-      "email": "john@example.com"
-    }
-  ]
-  ```
-  Note: Passwords are NOT returned for security
+
+```json
+[
+  {
+    "id": 1,
+    "username": "johndoe",
+    "email": "john@example.com"
+  }
+]
+```
+
+Note: Passwords are NOT returned for security
 
 ## Technologies Used
 
@@ -129,6 +149,7 @@ The project follows a layered architecture:
 ## Testing the API
 
 **Register a user:**
+
 ```bash
 curl -X POST http://localhost:8080/api/users/register \
   -H "Content-Type: application/json" \
@@ -136,6 +157,7 @@ curl -X POST http://localhost:8080/api/users/register \
 ```
 
 **Login:**
+
 ```bash
 curl -X POST http://localhost:8080/api/users/login \
   -H "Content-Type: application/json" \
@@ -143,11 +165,13 @@ curl -X POST http://localhost:8080/api/users/login \
 ```
 
 **Get all users:**
+
 ```bash
 curl http://localhost:8080/api/users/info
 ```
 
 **Say hello:**
+
 ```bash
 curl http://localhost:8080/hello
 ```
