@@ -26,4 +26,8 @@ public class UserService {
         return repo.findById(id)
                 .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + id));
     }
+
+    public User findByUsername(String username) {
+        return repo.findByUsername(username).orElse(null);
+    }
 }
