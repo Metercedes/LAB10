@@ -3,9 +3,11 @@ package com.example.LAB10.service;
 import com.example.LAB10.model.User;
 import com.example.LAB10.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
@@ -22,12 +24,19 @@ public class UserService {
         return repo.save(user);
     }
 
-    public User getUserById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + id));
+    public User authenticate(String username, String rawPassword) {
+        User user = repo.findByUsername(username)
+                .orElseThrow(() -> new BadCredentialsException("Invalid username or password"));
+        
+        if (!passwordEncoder.matches(rawPassword, user.getPassword())) {
+            throw new BadCredentialsException("Invalid username or password");
+        }
+        
+        return user;
     }
 
-    public User findByUsername(String username) {
-        return repo.findByUsername(username).orElse(null);
+    public User getUserById(Long id) {
+        return repo.findById(Objects.requireNonNull(id))
+                .orElseThrow(() -> new NoSuchElementException("User not found with ID: " + id));
     }
 }

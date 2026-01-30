@@ -12,6 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -51,7 +52,7 @@ public class NoteService {
     }
 
     public NoteDto getNoteById(Long id) {
-        Note note = noteRepo.findById(id)
+        Note note = noteRepo.findById(Objects.requireNonNull(id))
                 .orElseThrow(() -> new NoSuchElementException("Note not found"));
 
         if (!note.getUser().getId().equals(getCurrentUser().getId())) {
@@ -61,13 +62,41 @@ public class NoteService {
     }
 
     public void deleteNote(Long id) {
-        Note note = noteRepo.findById(id)
+        Note note = noteRepo.findById(Objects.requireNonNull(id))
                 .orElseThrow(() -> new NoSuchElementException("Note not found"));
 
         if (!note.getUser().getId().equals(getCurrentUser().getId())) {
             throw new AccessDeniedException("You cannot delete someone else's note");
         }
         noteRepo.delete(note);
+    }
+
+    public NoteDto updateNote(Long id, NoteDto dto) {
+        Note note = noteRepo.findById(Objects.requireNonNull(id))
+                .orElseThrow(() -> new NoSuchElementException("Note not found"));
+
+        if (!note.getUser().getId().equals(getCurrentUser().getId())) {
+            throw new AccessDeniedException("You cannot update someone else's note");
+        }
+        note.setTitle(dto.getTitle());
+        note.setContent(dto.getContent());
+        return mapToDto(noteRepo.save(note));
+    }
+
+    public NoteDto partialUpdateNote(Long id, NoteDto dto) {
+        Note note = noteRepo.findById(Objects.requireNonNull(id))
+                .orElseThrow(() -> new NoSuchElementException("Note not found"));
+
+        if (!note.getUser().getId().equals(getCurrentUser().getId())) {
+            throw new AccessDeniedException("You cannot update someone else's note");
+        }
+        if (dto.getTitle() != null) {
+            note.setTitle(dto.getTitle());
+        }
+        if (dto.getContent() != null) {
+            note.setContent(dto.getContent());
+        }
+        return mapToDto(noteRepo.save(note));
     }
 
     private NoteDto mapToDto(Note note) {

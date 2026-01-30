@@ -11,6 +11,6 @@ public class DemoController {
 
     @GetMapping
     public ResponseEntity<String> sayHello() {
-        return ResponseEntity.ok("Hello from Secured Endpoint! (Authorization Works ✅)");
+        return ResponseEntity.ok("You shouldn't be performing these!");
     }
 }

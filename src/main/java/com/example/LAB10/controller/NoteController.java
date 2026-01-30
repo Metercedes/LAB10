@@ -17,30 +17,45 @@ public class NoteController {
     private final NoteService noteService;
 
     @PostMapping
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<NoteDto> createNote(@Valid @RequestBody NoteDto dto) {
         return ResponseEntity.ok(noteService.createNote(dto));
     }
 
     @GetMapping
-    @PreAuthorize("hasRole('USER')")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<List<NoteDto>> getMyNotes() {
         return ResponseEntity.ok(noteService.getMyNotes());
     }
 
     @GetMapping("/count")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Integer> countNotes() {
         return ResponseEntity.ok(noteService.countMyNotesRawSql());
     }
 
     @GetMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<NoteDto> getNote(@PathVariable Long id) {
         return ResponseEntity.ok(noteService.getNoteById(id));
     }
 
     @DeleteMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
     public ResponseEntity<Void> deleteNote(@PathVariable Long id) {
         noteService.deleteNote(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<NoteDto> updateNote(@PathVariable Long id, @Valid @RequestBody NoteDto dto) {
+        return ResponseEntity.ok(noteService.updateNote(id, dto));
+    }
+
+    @PatchMapping("/{id}")
+    @PreAuthorize("hasAnyRole('USER', 'ADMIN')")
+    public ResponseEntity<NoteDto> partialUpdateNote(@PathVariable Long id, @RequestBody NoteDto dto) {
+        return ResponseEntity.ok(noteService.partialUpdateNote(id, dto));
     }
 }
